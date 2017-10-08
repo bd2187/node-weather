@@ -10,4 +10,10 @@ const argv = require('yargs').options('a', {
 // Sample input: "node app.js -a 'los angeles' "
 const userInput = argv.a;
 
-fetchGeolocation(argv.a);
+fetchGeolocation(userInput, (err, data) => {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(data);
+  }
+});

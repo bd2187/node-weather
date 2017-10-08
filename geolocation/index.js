@@ -1,6 +1,6 @@
 const request = require('request');
 
-function fetchGeolocation(address) {
+function fetchGeolocation(address, cb) {
   // replace white space with "%20"
   const encodedAddress = encodeURIComponent(address);
 
@@ -13,14 +13,13 @@ function fetchGeolocation(address) {
     if (!err && body.results.length !== 0) {
       const formattedAddress = body.results[0].formatted_address;
       const { lat, lng } = body.results[0].geometry.location;
-
-      return {
+      return cb({
         formattedAddress,
         lat,
         lng
-      };
+      });
     } else {
-      return 'Unable to determine location';
+      return cb('Unable to determine location');
     }
   });
 }
