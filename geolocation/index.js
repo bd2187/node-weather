@@ -1,27 +1,29 @@
 const request = require('request');
+const fetch = require('node-fetch');
 
-function fetchGeolocation(address, cb) {
+function fetchGeolocation(address) {
   // replace white space with "%20"
   const encodedAddress = encodeURIComponent(address);
 
   const geolocationEndpoint = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`;
 
-  request({ url: geolocationEndpoint, json: true }, function(err, res, body) {
-    /*
-      if err isn't null and no results are found, return object with data. Otherwise, return string with message
-    */
-    if (!err && body.results.length !== 0) {
-      const formattedAddress = body.results[0].formatted_address;
-      const { lat, lng } = body.results[0].geometry.location;
-      return cb(null, {
-        formattedAddress,
+  return fetch(geolocationEndpoint)
+    .then(res => {
+      return res.json(); // convert data to json object
+    })
+    .then(jsonData => {
+      // parse json object and return new object with specific key value pairs
+      const formattedAddress = jsonData.results[0].formatted_address;
+      const { lat, lng } = jsonData.results[0].geometry.location;
+      return {
         lat,
-        lng
-      });
-    } else {
-      return cb('Unable to determine location', null);
-    }
-  });
+        lng,
+        formattedAddress
+      };
+    })
+    .catch(err => {
+      return 'Unable to determine location';
+    });
 }
 
 module.exports = {
