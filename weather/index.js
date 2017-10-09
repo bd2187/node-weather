@@ -1,7 +1,10 @@
 const request = require('request');
 const { API_KEY } = require('../config');
 
-function fetchWeather(lat, lng) {
+function fetchWeather(lat, lng, cb) {
+  /*
+    lat and lng will be determined by fetchGeolocation's result
+  */
   const weatherEndpoint = `https://api.darksky.net/forecast/${API_KEY}/${lat},${lng}`;
 
   request(
@@ -11,9 +14,9 @@ function fetchWeather(lat, lng) {
     },
     (err, res, body) => {
       if (!err && res.statusCode === 200) {
-        console.log(`body: ${JSON.stringify(body.currently, undefined, 2)}`);
+        return cb(null, body.currently);
       } else {
-        console.log('Sorry, unable to determine weather for your location');
+        return cb('Sorry, unable to determine weather for your location', null);
       }
     }
   );
