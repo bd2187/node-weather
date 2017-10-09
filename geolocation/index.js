@@ -13,13 +13,13 @@ function fetchGeolocation(address, cb) {
     if (!err && body.results.length !== 0) {
       const formattedAddress = body.results[0].formatted_address;
       const { lat, lng } = body.results[0].geometry.location;
-      return cb({
+      return cb(null, {
         formattedAddress,
         lat,
         lng
       });
     } else {
-      return cb('Unable to determine location');
+      return cb('Unable to determine location', null);
     }
   });
 }
