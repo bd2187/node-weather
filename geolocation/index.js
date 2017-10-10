@@ -15,6 +15,7 @@ function fetchGeolocation(address) {
       // parse json object and return new object with specific key value pairs
       const formattedAddress = jsonData.results[0].formatted_address;
       const { lat, lng } = jsonData.results[0].geometry.location;
+
       return {
         lat,
         lng,
